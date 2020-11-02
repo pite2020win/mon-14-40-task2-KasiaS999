@@ -22,3 +22,26 @@
 #Delete these comments before commit!
 #
 #Good luck.
+
+from random import random
+
+airplane = {}
+airplane["tilt"] = input("value of titl ")
+airplane["lean"] = input("value of lean ")
+airplane["devation"] = input("value of devation ")
+
+x=1
+while x!=0:
+
+  airplane["tilt"] = random.random()
+  airplane["devation"] = random.random()
+  airplane["devation"] = random.random()
+  
+  
+  str = "devation {}". format(airplane[devation])
+  print(str)
+  str = "lean {}". format(airplane[lean])
+  print(str)
+  str = "tilt {}". format(airplane[tilt])
+  print(str)
+  x = input("if want to continue press 1, else press 0")
