@@ -64,8 +64,7 @@ class Environment:
       one_turbulance = self.turbulance.generate_event(self.turbulances_rate)
       
       yield one_turbulance
-      
-    
+        
 
 class Plane:
     
@@ -73,11 +72,9 @@ class Plane:
       self.roll = roll
       self.correction = correction
 
-      
 
 turbulences = Turbulance()
 environment = Environment(turbulences)
-
 correction = Correction()
 plane = Plane(0, correction)
 
@@ -89,9 +86,9 @@ def turbulence_and_correction_loop():
         time.sleep(loop_delay)
         os.system('clear')
 
+
 def take_input():
     input()
-   
    
 
 if __name__ == "__main__":
@@ -103,5 +100,3 @@ if __name__ == "__main__":
     t2.join()
     if_run = False
    
-
-
