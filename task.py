@@ -22,27 +22,86 @@
 #Delete these comments before commit!
 #
 #Good luck.
+from abc import ABC, abstractmethod
+from threading import Thread
+import random
+import time
+import logging
+import sys
+import os
 
-from random import random
+loop_delay = 0.25
+if_run = True
+logging.basicConfig(stream = sys.stdout,level = logging.DEBUG)
 
-airplane = {}
-airplane["tilt"] = input("value of titl ")
-airplane["lean"] = input("value of lean ")
-airplane["devation"] = input("value of devation ")
+class Events(ABC):
+  @abstractmethod
+  def generate_event(self):
+    pass
 
-x=1
-while x!= 0:
+class Turbulance(Events):
 
-  airplane["tilt"] = random()
-  airplane["devation"] = random()
-  airplane["devation"] = random()
+  def generate_event(self, rate_of_correction):
+    turbulence = random.gauss(0, 2*rate_of_correction)
+    return turbulence
+
+
+class Correction(Events):
+
+  def generate_event(self, turbulence):
+      correction = -(turbulence*(random.randrange(9999, 10022, 1)/10000))
+      return correction
+
   
-  
-  str = "devation {}".format(airplane["devation"])
-  print(str)
-  str = "lean {}".format(airplane["lean"])
-  print(str)
-  str = "tilt {}".format(airplane["tilt"])
-  print(str)
-  x = input("if want to continue press 1, else press 0")
+class Environment:
+  def __init__(self, turbulance):
+    self.turbulance = turbulance
+    self.turbulances_rate = 2
+    
+  def create_turbulances(self):
+    global if_run 
+    while if_run:  
+      one_turbulance = self.turbulance.generate_event(self.turbulances_rate)
+      
+      yield one_turbulance
+      
+    
+
+class Plane:
+    
+    def __init__(self,roll, correction):
+      self.roll = roll
+      self.correction = correction
+
+      
+
+turbulences = Turbulance()
+environment = Environment(turbulences)
+
+correction = Correction()
+plane = Plane(0, correction)
+
+def turbulence_and_correction_loop(): 
+    for turbulence in environment.create_turbulances():
+        correction = plane.correction.generate_event(turbulence)
+        plane.roll += correction+turbulence
+        logging.info("\nturbulance: {}, \ncorrection: {}, \nroll after correction {} \n\n Press Enter to stop ".format(turbulence,correction, plane.roll))
+        time.sleep(loop_delay)
+        os.system('clear')
+
+def take_input():
+    input()
+   
+   
+
+if __name__ == "__main__":
+    
+    t1 = Thread(target = turbulence_and_correction_loop)
+    t2 = Thread(target = take_input)
+    t2.start()
+    t1.start()
+    t2.join()
+    if_run = False
+   
+
 
